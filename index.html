@@ -432,6 +432,19 @@
       font-size: 0.92rem;
     }
 
+    .concept-note {
+      margin: -6px 0 18px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      background: rgba(212, 175, 55, 0.08);
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .concept-note strong { color: var(--text); }
+
     .vlan-list {
       margin: 14px 0 0;
       padding-left: 18px;
@@ -747,6 +760,9 @@
       <div class="tool-panel" data-tool="cidr">
         <h2>Convertisseur CIDR / masque</h2>
         <p class="subtitle">Saisissez le préfixe ou le masque : l’autre valeur sera calculée automatiquement.</p>
+        <div class="concept-note">
+          <strong>CIDR :</strong> le préfixe indique combien de bits appartiennent au réseau. Par exemple, <strong>/24</strong> équivaut à <strong>255.255.255.0</strong>. Le calculateur convertit automatiquement l’un vers l’autre et indique la capacité du réseau.
+        </div>
 
         <div class="field">
           <label for="cidrPrefix">Préfixe CIDR</label>
@@ -768,6 +784,9 @@
       <div class="tool-panel" data-tool="dhcp">
         <h2>Plage DHCP</h2>
         <p class="subtitle">Générez automatiquement une plage DHCP à partir du réseau.</p>
+        <div class="concept-note">
+          <strong>DHCP :</strong> ce service attribue automatiquement une adresse IP, un masque et une passerelle aux appareils. Saisissez le réseau, le masque et les bornes de la plage pour simuler les adresses distribuées.
+        </div>
 
         <div class="field">
           <label for="dhcpNetwork">Réseau</label>
@@ -867,6 +886,9 @@
       <div class="tool-panel" data-tool="vlan">
         <h2>Planificateur VLAN</h2>
         <p class="subtitle">Choisissez un réseau, le nombre de VLAN et calculez automatiquement la répartition.</p>
+        <div class="concept-note">
+          <strong>VLSM :</strong> le découpage variable permet d’adapter les sous-réseaux aux besoins de chaque département. Indiquez le nombre de machines par VLAN ; l’outil calcule le préfixe, le masque, la plage d’hôtes et le broadcast nécessaires.
+        </div>
 
         <div class="field">
           <label for="vlanNetwork">Réseau de base</label>
