@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberNet Calc | Calculs réseau</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --bg-2: #edf3fd;
+      --panel: rgba(255, 255, 255, 0.98);
+      --panel-strong: rgba(247, 250, 255, 1);
+      --line: rgba(16, 70, 140, 0.14);
+      --text: #12263d;
+      --muted: #496580;
+      --primary: #0b5ed7;
+      --secondary: #0d6efd;
+      --accent: #d4af37;
+      --success: #1b8f5a;
+      --warning: #d4a313;
+      --danger: #cf3d3d;
+      --shadow: rgba(28, 66, 117, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      background-image:
+        linear-gradient(rgba(11, 94, 215, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 94, 215, 0.025) 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+
+    body::after {
+      background: linear-gradient(180deg, transparent 0%, rgba(11, 94, 215, 0.02) 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 30px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 6px 18px rgba(17, 38, 61, 0.04);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 18px;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      padding: 70px 0 30px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border: 1px solid rgba(11, 94, 215, 0.18);
+      border-radius: 999px;
+      background: rgba(11, 94, 215, 0.06);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 16px 0 14px;
+      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      max-width: 640px;
+      margin: 0;
+      font-size: 1.04rem;
+      color: var(--muted);
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 16px;
+      box-shadow: 0 12px 24px var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+      color: var(--secondary);
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, #ffffff 0%, #edf5ff 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 18px 30px var(--shadow);
+    }
+
+    .hero-card h3 {
+      margin: 0 0 18px;
+      font-size: 1.1rem;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-box {
+      background: rgba(11, 94, 215, 0.03);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 12px;
+    }
+
+    .mini-box strong {
+      display: block;
+      color: var(--primary);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .mini-box span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .single-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 18px 35px var(--shadow);
+      margin-bottom: 30px;
+    }
+
+    .selector-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .selector-row label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .selector-row select {
+      min-width: 280px;
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .tool-panel {
+      display: none;
+      border: 1px solid var(--line);
+      background: rgba(11, 94, 215, 0.015);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .tool-panel.active {
+      display: block;
+    }
+
+    .topology-toolbar {
+      display: grid;
+      grid-template-columns: minmax(170px, 1fr) auto auto auto auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .topology-toolbar .field { margin: 0; }
+
+    .topology-workspace {
+      position: relative;
+      overflow: auto;
+      min-height: 430px;
+      border: 1px solid rgba(11, 94, 215, 0.2);
+      border-radius: 16px;
+      background-color: #f7fbff;
+      background-image:
+        linear-gradient(rgba(11, 94, 215, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 94, 215, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .topology-zoom {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      display: flex;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 6px 14px var(--shadow);
+    }
+
+    .zoom-button {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .zoom-button:hover { background: #edf5ff; }
+
+    #topologyCanvas {
+      display: block;
+      min-width: 760px;
+      width: 100%;
+      height: 430px;
+    }
+
+    .topology-link {
+      stroke: #7393b4;
+      stroke-width: 3;
+      stroke-dasharray: 7 5;
+    }
+
+    .topology-node { cursor: grab; }
+    .topology-node:active { cursor: grabbing; }
+    .topology-node rect,
+    .topology-node circle {
+      stroke: #0b5ed7;
+      stroke-width: 2;
+      filter: drop-shadow(0 4px 4px rgba(28, 66, 117, 0.16));
+    }
+
+    .topology-node text {
+      fill: #12263d;
+      font-size: 12px;
+      font-weight: 700;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .topology-node .node-icon {
+      fill: #0b5ed7;
+      font-size: 20px;
+    }
+
+    .node-visual {
+      stroke: #0b5ed7;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .node-detail {
+      fill: #d4af37;
+      stroke: #a68119;
+      stroke-width: 1;
+    }
+
+    .topology-port {
+      fill: #ffffff;
+      stroke: #0b5ed7;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .topology-node.selected rect,
+    .topology-node.selected circle {
+      stroke: #d4af37;
+      stroke-width: 4;
+    }
+
+    .topology-status {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .topology-traffic {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto auto;
+      gap: 10px;
+      align-items: end;
+      margin-top: 16px;
+    }
+
+    .packet {
+      fill: #d4af37;
+      stroke: #fff;
+      stroke-width: 2;
+      filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.75));
+    }
+
+    .packet.machine { fill: #d4af37; }
+    .packet.router { fill: #0b5ed7; }
+    .packet.network { fill: #1b8f5a; }
+    .packet.lan { fill: #cf3d3d; }
+
+    .tool-panel h2 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+    }
+
+    .tool-panel .subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .vlan-list {
+      margin: 14px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .vlan-list li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .field {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(86, 208, 255, 0.7);
+      box-shadow: 0 0 0 3px rgba(86, 208, 255, 0.12);
+    }
+
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 18px rgba(11, 94, 215, 0.16);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0d6efd);
+      color: #ffffff;
+    }
+    .btn-secondary {
+      background: linear-gradient(135deg, #f7d77d, #d4af37);
+      color: #2a2205;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      box-shadow: 0 8px 18px rgba(212, 175, 55, 0.18);
+    }
+
+    .result-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(11, 94, 215, 0.15);
+      background: rgba(11, 94, 215, 0.02);
+      color: var(--text);
+      min-height: 80px;
+    }
+
+    .result-box strong { color: var(--secondary); }
+
+    .result-box ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 20px 0 50px;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid,
+      .grid,
+      .quick-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+        justify-content: center;
+        padding: 14px 0;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .wrap { width: min(100% - 18px, 1180px); }
+      .nav {
+        justify-content: center;
+      }
+      .calc-card {
+        padding: 18px;
+      }
+      .actions-row {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+      .topology-toolbar,
+      .topology-traffic {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">CyberNet Calc</div>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#ip">IP</a>
+        <a href="#cidr">CIDR</a>
+        <a href="#dhcp">DHCP</a>
+        <a href="#hosts">Hôtes</a>
+        <a href="#binary">Base</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Security Operations</span>
+          <h1>Automatisez tous les calculs réseau.</h1>
+          <p class="lead">
+            Calculez les sous-réseaux, les masques, les plages DHCP, les hôtes utilisables,
+            les classes IP et les conversions entre bases en quelques secondes.
+          </p>
+
+          <div class="quick-stats">
+            <div class="stat">
+              <strong>IP</strong>
+              <span>Adresse / réseau</span>
+            </div>
+            <div class="stat">
+              <strong>DHCP</strong>
+              <span>Plages automatiques</span>
+            </div>
+            <div class="stat">
+              <strong>VLSM</strong>
+              <span>Gestion d'espace</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <h3>Outils rapides</h3>
+          <div class="mini-grid">
+            <div class="mini-box">
+              <strong>IPv4</strong>
+              <span>Masque / réseau / hôtes</span>
+            </div>
+            <div class="mini-box">
+              <strong>CIDR</strong>
+              <span>/24, /26, /29</span>
+            </div>
+            <div class="mini-box">
+              <strong>DHCP</strong>
+              <span>Range automatique</span>
+            </div>
+            <div class="mini-box">
+              <strong>Base</strong>
+              <span>Conversion rapide</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="single-panel">
+      <div class="selector-row">
+        <label for="calcType">Section et outil</label>
+        <select id="calcType">
+          <optgroup label="Adressage IPv4">
+            <option value="subnet">Calculateur IP et sous-réseau</option>
+            <option value="class">Classe IP et type</option>
+          </optgroup>
+          <optgroup label="Sous-réseaux et CIDR">
+            <option value="cidr">Convertisseur CIDR / masque</option>
+            <option value="hosts">Nombre d'hôtes</option>
+          </optgroup>
+          <optgroup label="Services réseau">
+            <option value="dhcp">Plage DHCP</option>
+          </optgroup>
+          <optgroup label="VLAN et segmentation">
+            <option value="vlan">Planificateur VLAN</option>
+          </optgroup>
+          <optgroup label="Topologie et trafic">
+            <option value="topology">Constructeur de topologie</option>
+          </optgroup>
+          <optgroup label="Conversions">
+            <option value="binary">Convertisseur de base</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="tool-panel" data-tool="topology">
+        <h2>Constructeur de topologie réseau</h2>
+        <p class="subtitle">Ajoutez des équipements, reliez-les, puis lancez un paquet pour visualiser son trajet.</p>
+
+        <div class="topology-toolbar">
+          <div class="field">
+            <label for="topologyDeviceType">Équipement</label>
+            <select id="topologyDeviceType">
+              <option value="router">Routeur</option>
+              <option value="switch">Switch</option>
+              <option value="pc">PC</option>
+              <option value="server">Serveur</option>
+              <option value="firewall">Pare-feu</option>
+              <option value="accessPoint">Point d'accès</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="addTopologyDevice">Ajouter</button>
+          <button class="btn btn-secondary" id="connectTopologyDevices">Relier deux équipements</button>
+          <button class="btn btn-secondary" id="removeTopologyDevice">Supprimer un équipement</button>
+          <button class="btn btn-secondary" id="clearTopology">Effacer</button>
+        </div>
+
+        <div class="topology-workspace">
+          <div class="topology-zoom" aria-label="Contrôles de zoom">
+            <button class="zoom-button" id="zoomOutTopology" title="Dézoomer" aria-label="Dézoomer">−</button>
+            <button class="zoom-button" id="resetZoomTopology" title="Réinitialiser le zoom" aria-label="Réinitialiser le zoom">100%</button>
+            <button class="zoom-button" id="zoomInTopology" title="Zoomer" aria-label="Zoomer">+</button>
+          </div>
+          <svg id="topologyCanvas" viewBox="0 0 900 430" role="img" aria-label="Zone de construction de topologie réseau">
+            <g id="topologyLinks"></g>
+            <g id="topologyNodes"></g>
+            <g id="topologyPackets"></g>
+          </svg>
+        </div>
+        <p class="topology-status" id="topologyStatus">Ajoutez des équipements pour commencer. Pour créer un lien, activez le mode « Relier » puis cliquez sur deux équipements.</p>
+
+        <div class="topology-traffic">
+          <div class="field">
+            <label for="trafficMessageType">Type de message</label>
+            <select id="trafficMessageType">
+              <option value="machine">Machine à machine</option>
+              <option value="router">Routeur vers équipement</option>
+              <option value="network">Réseau vers réseau</option>
+              <option value="lan">Équipement vers LAN</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="trafficSource">Source du trafic</label>
+            <select id="trafficSource"></select>
+          </div>
+          <div class="field">
+            <label for="trafficDestination">Destination du trafic</label>
+            <select id="trafficDestination">
+              <option value="allHosts">Tous les hôtes</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="sendTopologyTraffic">Lancer le trafic</button>
+          <button class="btn btn-secondary" id="stopTopologyTraffic" disabled>Arrêter</button>
+        </div>
+      </div>
+
+      <div class="tool-panel active" data-tool="subnet">
+        <h2>Calculateur IP et sous-réseau</h2>
+        <p class="subtitle">Adresse IP + masque pour obtenir le réseau, la diffusion et la plage utilisable.</p>
+
+        <div class="field">
+          <label for="ipAddress">Adresse IP</label>
+          <input id="ipAddress" type="text" value="192.168.10.25" />
+        </div>
+
+        <div class="field">
+          <label for="subnetMask">Masque de sous-réseau</label>
+          <input id="subnetMask" type="text" value="255.255.255.0" />
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="calculateSubnet()">Calculer</button>
+          <button class="btn btn-secondary" onclick="resetIpCalc()">Réinitialiser</button>
+        </div>
+
+        <div class="result-box" id="subnetResult"></div>
+      </div>
+
+      <div class="tool-panel" data-tool="cidr">
+        <h2>Convertisseur CIDR / masque</h2>
+        <p class="subtitle">Saisissez le préfixe ou le masque : l’autre valeur sera calculée automatiquement.</p>
+
+        <div class="field">
+          <label for="cidrPrefix">Préfixe CIDR</label>
+          <input id="cidrPrefix" type="number" min="0" max="32" placeholder="Ex : 24" />
+        </div>
+
+        <div class="field">
+          <label for="maskInput">Masque de sous-réseau</label>
+          <input id="maskInput" type="text" placeholder="Ex : 255.255.255.0" />
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="calculateCidr()">Vérifier la correspondance</button>
+        </div>
+
+        <div class="result-box" id="cidrResult"></div>
+      </div>
+
+      <div class="tool-panel" data-tool="dhcp">
+        <h2>Plage DHCP</h2>
+        <p class="subtitle">Générez automatiquement une plage DHCP à partir du réseau.</p>
+
+        <div class="field">
+          <label for="dhcpNetwork">Réseau</label>
+          <input id="dhcpNetwork" type="text" value="192.168.1.0" />
+        </div>
+
+        <div class="field">
+          <label for="dhcpMask">Masque</label>
+          <input id="dhcpMask" type="text" value="255.255.255.0" />
+        </div>
+
+        <div class="field">
+          <label for="dhcpStart">Début recommandé</label>
+          <input id="dhcpStart" type="number" value="100" min="1" max="254" />
+        </div>
+
+        <div class="field">
+          <label for="dhcpEnd">Fin recommandée</label>
+          <input id="dhcpEnd" type="number" value="200" min="1" max="254" />
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="calculateDhcp()">Générer</button>
+        </div>
+
+        <div class="result-box" id="dhcpResult"></div>
+      </div>
+
+      <div class="tool-panel" data-tool="hosts">
+        <h2>Nombre d'hôtes</h2>
+        <p class="subtitle">Obtenez le nombre total d'adresses et d'hôtes utilisables.</p>
+
+        <div class="field">
+          <label for="hostPrefix">Préfixe /CIDR</label>
+          <input id="hostPrefix" type="number" min="0" max="32" value="24" />
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="calculateHosts()">Calculer</button>
+        </div>
+
+        <div class="result-box" id="hostResult"></div>
+      </div>
+
+      <div class="tool-panel" data-tool="binary">
+        <h2>Convertisseur de base</h2>
+        <p class="subtitle">Convertit entre binaire, décimal, octal et hexadécimal.</p>
+
+        <div class="field">
+          <label for="baseInputValue">Valeur à convertir</label>
+          <input id="baseInputValue" type="text" value="10110110" />
+        </div>
+
+        <div class="field">
+          <label for="baseFrom">Depuis la base</label>
+          <select id="baseFrom">
+            <option value="2">Binaire</option>
+            <option value="10" selected>Décimal</option>
+            <option value="8">Octal</option>
+            <option value="16">Hexadécimal</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="baseTo">Vers la base</label>
+          <select id="baseTo">
+            <option value="2" selected>Binaire</option>
+            <option value="10">Décimal</option>
+            <option value="8">Octal</option>
+            <option value="16">Hexadécimal</option>
+          </select>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="convertBase()">Convertir</button>
+        </div>
+
+        <div class="result-box" id="baseResult"></div>
+      </div>
+
+      <div class="tool-panel" data-tool="class">
+        <h2>Classe IP et type</h2>
+        <p class="subtitle">Détermine la classe, le type public/privé et le masque de classe.</p>
+
+        <div class="field">
+          <label for="classIp">Adresse IP</label>
+          <input id="classIp" type="text" value="172.16.0.10" />
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="calculateClass()">Analyser</button>
+        </div>
+
+        <div class="result-box" id="classResult"></div>
+      </div>
+
+      <div class="tool-panel" data-tool="vlan">
+        <h2>Planificateur VLAN</h2>
+        <p class="subtitle">Choisissez un réseau, le nombre de VLAN et calculez automatiquement la répartition.</p>
+
+        <div class="field">
+          <label for="vlanNetwork">Réseau de base</label>
+          <input id="vlanNetwork" type="text" value="192.168.10.0" />
+        </div>
+
+        <div class="field">
+          <label for="vlanMask">Masque de base</label>
+          <input id="vlanMask" type="text" value="255.255.255.0" />
+        </div>
+
+        <div class="field">
+          <label for="vlanCount">Nombre de VLAN</label>
+          <input id="vlanCount" type="number" min="1" max="256" value="4" />
+        </div>
+
+        <div class="field">
+          <label for="vlanHosts">Hôtes visés par VLAN (même taille pour tous)</label>
+          <input id="vlanHosts" type="number" min="1" max="500" value="30" />
+        </div>
+
+        <div class="field">
+          <label for="vlanSizes">Tailles par VLAN / département (optionnel)</label>
+          <input id="vlanSizes" type="text" value="20, 40, 15, 60" placeholder="Ex: 20, 40, 15, 60" />
+        </div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="calculateVlanPlan()">Calculer les VLAN</button>
+        </div>
+
+        <div class="result-box" id="vlanResult"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">NetCalc Pro • Calculateur réseau</footer>
+
+  <script>
+    const calcTypeSelect = document.getElementById('calcType');
+    const toolPanels = document.querySelectorAll('.tool-panel');
+
+    function showTool(toolName) {
+      toolPanels.forEach(panel => {
+        panel.classList.toggle('active', panel.dataset.tool === toolName);
+      });
+    }
+
+    calcTypeSelect.addEventListener('change', (event) => {
+      showTool(event.target.value);
+    });
+
+    const topologyCanvas = document.getElementById('topologyCanvas');
+    const topologyLinks = document.getElementById('topologyLinks');
+    const topologyNodes = document.getElementById('topologyNodes');
+    const topologyPackets = document.getElementById('topologyPackets');
+    const topologyStatus = document.getElementById('topologyStatus');
+    const topologyZoomButton = document.getElementById('resetZoomTopology');
+    const trafficMessageType = document.getElementById('trafficMessageType');
+    const trafficSource = document.getElementById('trafficSource');
+    const trafficDestination = document.getElementById('trafficDestination');
+    const topologyState = {
+      nodes: [],
+      links: [],
+      nextId: 1,
+      connectMode: false,
+      selectedNodeId: null,
+      dragNode: null,
+      moved: false,
+      deleteMode: false,
+      trafficRunId: 0,
+      trafficTimers: new Set(),
+      trafficFrames: new Set()
+    };
+
+    let topologyZoom = 1;
+
+    function updateTopologyZoom() {
+      const width = 900 / topologyZoom;
+      const height = 430 / topologyZoom;
+      const x = (900 - width) / 2;
+      const y = (430 - height) / 2;
+      topologyCanvas.setAttribute('viewBox', `${x} ${y} ${width} ${height}`);
+      topologyZoomButton.textContent = `${Math.round(topologyZoom * 100)}%`;
+    }
+
+    const topologyDeviceNames = {
+      router: 'Routeur',
+      switch: 'Switch',
+      pc: 'PC',
+      server: 'Serveur',
+      firewall: 'Pare-feu',
+      accessPoint: 'Point d’accès'
+    };
+
+    const topologyDeviceIcons = {
+      router: 'R',
+      switch: 'S',
+      pc: 'P',
+      server: 'SV',
+      firewall: 'F',
+      accessPoint: 'AP'
+    };
+
+    const topologyPortCounts = {
+      router: 4,
+      switch: 8,
+      pc: 1,
+      server: 2,
+      firewall: 4,
+      accessPoint: 2
+    };
+
+    function topologyPoint(event) {
+      const bounds = topologyCanvas.getBoundingClientRect();
+      return {
+        x: Math.max(42, Math.min(858, (event.clientX - bounds.left) * 900 / bounds.width)),
+        y: Math.max(42, Math.min(388, (event.clientY - bounds.top) * 430 / bounds.height))
+      };
+    }
+
+    function getTopologyNode(nodeId) {
+      return topologyState.nodes.find(node => node.id === nodeId);
+    }
+
+    function getTopologyPortPoint(node, portIndex) {
+      const spacing = node.ports === 1 ? 0 : 80 / (node.ports - 1);
+      return {
+        x: node.x - 40 + portIndex * spacing,
+        y: node.y + 38
+      };
+    }
+
+    function getUsedTopologyPorts(nodeId) {
+      const used = new Set();
+      topologyState.links.forEach(link => {
+        if (link.source === nodeId) used.add(link.sourcePort);
+        if (link.target === nodeId) used.add(link.targetPort);
+      });
+      return used;
+    }
+
+    function getFreeTopologyPort(nodeId) {
+      const node = getTopologyNode(nodeId);
+      const used = getUsedTopologyPorts(nodeId);
+      for (let port = 0; port < node.ports; port++) {
+        if (!used.has(port)) return port;
+      }
+      return null;
+    }
+
+    function getTopologyLink(sourceId, targetId) {
+      return topologyState.links.find(link =>
+        (link.source === sourceId && link.target === targetId) ||
+        (link.source === targetId && link.target === sourceId)
+      );
+    }
+
+    function topologyNodeGraphic(type) {
+      if (type === 'router') {
+        return `<g class="node-visual" fill="#e8f2ff">
+          <path d="M-22-20 L-30-28 M22-20 L30-28"></path>
+          <rect x="-30" y="-20" width="60" height="34" rx="7"></rect>
+          <path d="M-20-3 H20 M-13 7 H-7 M-2 7 H4 M9 7 H15"></path>
+          <circle class="node-detail" cx="-18" cy="-11" r="3"></circle>
+          <circle class="node-detail" cx="-8" cy="-11" r="3"></circle>
+        </g>`;
+      }
+      if (type === 'switch') {
+        return `<g class="node-visual" fill="#ffffff">
+          <rect x="-34" y="-18" width="68" height="32" rx="5"></rect>
+          <path d="M-25-7 H25 M-25 4 H25"></path>
+          <circle class="node-detail" cx="-22" cy="-12" r="2"></circle>
+          <circle class="node-detail" cx="-12" cy="-12" r="2"></circle>
+          <circle class="node-detail" cx="-2" cy="-12" r="2"></circle>
+          <circle class="node-detail" cx="8" cy="-12" r="2"></circle>
+          <circle class="node-detail" cx="18" cy="-12" r="2"></circle>
+        </g>`;
+      }
+      if (type === 'pc') {
+        return `<g class="node-visual" fill="#ffffff">
+          <rect x="-27" y="-22" width="54" height="33" rx="3"></rect>
+          <path d="M-7 18 H7 M0 11 V18 M-17 25 H17"></path>
+          <path d="M-18-15 H18 V4 H-18 Z" fill="#e8f2ff" stroke="none"></path>
+        </g>`;
+      }
+      if (type === 'server') {
+        return `<g class="node-visual" fill="#eef5ff">
+          <rect x="-25" y="-24" width="50" height="48" rx="4"></rect>
+          <path d="M-18-12 H18 M-18 0 H18 M-18 12 H18"></path>
+          <circle class="node-detail" cx="-13" cy="-17" r="2"></circle>
+          <circle class="node-detail" cx="-13" cy="-5" r="2"></circle>
+          <circle class="node-detail" cx="-13" cy="7" r="2"></circle>
+        </g>`;
+      }
+      if (type === 'firewall') {
+        return `<g class="node-visual" fill="#fff4d6">
+          <path d="M-29 20 V-17 H29 V20 Z"></path>
+          <path d="M-29-5 H29 M-29 7 H29 M-14-17 V-5 M10-17 V-5 M-20-5 V7 M5-5 V7 M-10 7 V20 M17 7 V20"></path>
+        </g>`;
+      }
+      return `<g class="node-visual" fill="#e8f2ff">
+        <path d="M-25-9 Q0-28 25-9"></path>
+        <path d="M-17-2 Q0-15 17-2 M-9 5 Q0-2 9 5"></path>
+        <rect x="-29" y="-2" width="58" height="22" rx="7"></rect>
+        <circle class="node-detail" cx="-15" cy="9" r="3"></circle>
+        <circle class="node-detail" cx="-5" cy="9" r="3"></circle>
+      </g>`;
+    }
+
+    function renderTopology() {
+      topologyLinks.innerHTML = topologyState.links.map(link => {
+        const source = getTopologyNode(link.source);
+        const target = getTopologyNode(link.target);
+        const sourcePort = getTopologyPortPoint(source, link.sourcePort);
+        const targetPort = getTopologyPortPoint(target, link.targetPort);
+        return `<line class="topology-link" x1="${sourcePort.x}" y1="${sourcePort.y}" x2="${targetPort.x}" y2="${targetPort.y}" />`;
+      }).join('');
+
+      topologyNodes.innerHTML = topologyState.nodes.map(node => `
+        <g class="topology-node${node.id === topologyState.selectedNodeId ? ' selected' : ''}" data-node-id="${node.id}" transform="translate(${node.x} ${node.y})">
+          <rect x="-50" y="-30" width="100" height="60" rx="12" fill="${node.color}"></rect>
+          ${topologyNodeGraphic(node.type)}
+          <text y="18">${node.label}</text>
+          ${Array.from({ length: node.ports }, (_, index) => {
+            const x = node.ports === 1 ? 0 : -40 + index * (80 / (node.ports - 1));
+            return `<circle class="topology-port" cx="${x}" cy="38" r="5"></circle>`;
+          }).join('')}
+        </g>
+      `).join('');
+
+      topologyNodes.querySelectorAll('.topology-node').forEach(nodeElement => {
+        nodeElement.addEventListener('pointerdown', event => {
+          if (topologyState.connectMode || topologyState.deleteMode) return;
+          topologyState.dragNode = Number(nodeElement.dataset.nodeId);
+          topologyState.moved = false;
+          event.preventDefault();
+        });
+        nodeElement.addEventListener('click', () => {
+          if (topologyState.deleteMode && !topologyState.moved) {
+            deleteTopologyNode(Number(nodeElement.dataset.nodeId));
+            return;
+          }
+          if (!topologyState.connectMode || topologyState.moved) return;
+          selectTopologyNode(Number(nodeElement.dataset.nodeId));
+        });
+      });
+
+      updateTrafficSelectors();
+    }
+
+    function addTopologyDevice() {
+      const type = document.getElementById('topologyDeviceType').value;
+      const number = topologyState.nodes.filter(node => node.type === type).length + 1;
+      const columns = 4;
+      const index = topologyState.nodes.length;
+      topologyState.nodes.push({
+        id: topologyState.nextId++,
+        type,
+        label: `${topologyDeviceNames[type]} ${number}`,
+        icon: topologyDeviceIcons[type],
+        ports: topologyPortCounts[type],
+        color: type === 'router' || type === 'firewall' ? '#e8f2ff' : '#ffffff',
+        x: 130 + (index % columns) * 210,
+        y: 100 + Math.floor(index / columns) * 150
+      });
+      renderTopology();
+      topologyStatus.textContent = 'Équipement ajouté. Activez « Relier deux équipements » pour créer un lien.';
+    }
+
+    function selectTopologyNode(nodeId) {
+      if (topologyState.selectedNodeId === null) {
+        if (getFreeTopologyPort(nodeId) === null) {
+          topologyStatus.textContent = 'Cet équipement n’a plus de port libre.';
+          return;
+        }
+        topologyState.selectedNodeId = nodeId;
+        topologyStatus.textContent = 'Premier équipement sélectionné. Cliquez sur le second équipement.';
+        renderTopology();
+        return;
+      }
+
+      if (topologyState.selectedNodeId === nodeId) return;
+      const exists = topologyState.links.some(link =>
+        (link.source === topologyState.selectedNodeId && link.target === nodeId) ||
+        (link.source === nodeId && link.target === topologyState.selectedNodeId)
+      );
+
+      if (!exists) {
+        const sourcePort = getFreeTopologyPort(topologyState.selectedNodeId);
+        const targetPort = getFreeTopologyPort(nodeId);
+        if (sourcePort === null || targetPort === null) {
+          topologyStatus.textContent = 'Impossible de créer le lien : un des équipements n’a plus de port libre.';
+        } else {
+          topologyState.links.push({
+            source: topologyState.selectedNodeId,
+            target: nodeId,
+            sourcePort,
+            targetPort
+          });
+          topologyStatus.textContent = `Lien créé sur les ports ${sourcePort + 1} et ${targetPort + 1}.`;
+        }
+      } else {
+        topologyStatus.textContent = 'Ces deux équipements sont déjà reliés.';
+      }
+
+      topologyState.selectedNodeId = null;
+      topologyState.connectMode = false;
+      document.getElementById('connectTopologyDevices').textContent = 'Relier deux équipements';
+      renderTopology();
+    }
+
+    function deleteTopologyNode(nodeId) {
+      const node = getTopologyNode(nodeId);
+      topologyState.nodes = topologyState.nodes.filter(item => item.id !== nodeId);
+      topologyState.links = topologyState.links.filter(link => link.source !== nodeId && link.target !== nodeId);
+      topologyState.selectedNodeId = null;
+      topologyState.deleteMode = false;
+      document.getElementById('removeTopologyDevice').textContent = 'Supprimer un équipement';
+      topologyStatus.textContent = `${node.label} et ses liaisons ont été supprimés.`;
+      renderTopology();
+    }
+
+    function updateTrafficSelectors() {
+      const options = topologyState.nodes.map(node => `<option value="${node.id}">${node.label}</option>`).join('');
+      trafficSource.innerHTML = options;
+      trafficDestination.innerHTML = `<option value="allHosts">Tous les hôtes</option>${options}`;
+      trafficDestination.disabled = topologyState.nodes.length < 2;
+      document.getElementById('sendTopologyTraffic').disabled = topologyState.nodes.length < 2;
+      if (topologyState.nodes.length > 1) trafficDestination.selectedIndex = 0;
+    }
+
+    function findTopologyPath(sourceId, targetId) {
+      const queue = [sourceId];
+      const previous = new Map([[sourceId, null]]);
+
+      while (queue.length) {
+        const current = queue.shift();
+        if (current === targetId) break;
+        topologyState.links.forEach(link => {
+          const neighbor = link.source === current ? link.target : link.target === current ? link.source : null;
+          if (neighbor !== null && !previous.has(neighbor)) {
+            previous.set(neighbor, current);
+            queue.push(neighbor);
+          }
+        });
+      }
+
+      if (!previous.has(targetId)) return [];
+      const path = [];
+      for (let nodeId = targetId; nodeId !== null; nodeId = previous.get(nodeId)) path.unshift(nodeId);
+      return path;
+    }
+
+    function stopTopologyTraffic(message = 'Trafic arrêté.') {
+      topologyState.trafficRunId++;
+      topologyState.trafficTimers.forEach(timer => clearTimeout(timer));
+      topologyState.trafficFrames.forEach(frame => cancelAnimationFrame(frame));
+      topologyState.trafficTimers.clear();
+      topologyState.trafficFrames.clear();
+      topologyPackets.innerHTML = '';
+      document.getElementById('stopTopologyTraffic').disabled = true;
+      topologyStatus.textContent = message;
+    }
+
+    function animateTopologyTraffic(path, runId, messageType) {
+      const bitCount = 8;
+
+      for (let bitIndex = 0; bitIndex < bitCount; bitIndex++) {
+        const packet = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        packet.setAttribute('r', '6');
+        packet.setAttribute('class', `packet ${messageType}`);
+        topologyPackets.appendChild(packet);
+
+        const timer = setTimeout(() => {
+          topologyState.trafficTimers.delete(timer);
+          let segmentIndex = 0;
+
+          function nextSegment() {
+            if (runId !== topologyState.trafficRunId) return;
+            if (segmentIndex >= path.length - 1) {
+              segmentIndex = 0;
+              nextSegment();
+              return;
+            }
+
+            const sourceNode = getTopologyNode(path[segmentIndex]);
+            const targetNode = getTopologyNode(path[segmentIndex + 1]);
+            const link = getTopologyLink(sourceNode.id, targetNode.id);
+            const forward = link.source === sourceNode.id;
+            const source = getTopologyPortPoint(sourceNode, forward ? link.sourcePort : link.targetPort);
+            const target = getTopologyPortPoint(targetNode, forward ? link.targetPort : link.sourcePort);
+            const startTime = performance.now();
+
+            function movePacket(now) {
+              if (runId !== topologyState.trafficRunId) return;
+              const progress = Math.min(1, (now - startTime) / 700);
+              packet.setAttribute('cx', source.x + (target.x - source.x) * progress);
+              packet.setAttribute('cy', source.y + (target.y - source.y) * progress);
+              if (progress < 1) {
+                const frame = requestAnimationFrame(movePacket);
+                topologyState.trafficFrames.add(frame);
+              } else {
+                segmentIndex++;
+                nextSegment();
+              }
+            }
+
+            const frame = requestAnimationFrame(movePacket);
+            topologyState.trafficFrames.add(frame);
+          }
+
+          nextSegment();
+        }, bitIndex * 100);
+        topologyState.trafficTimers.add(timer);
+      }
+    }
+
+    topologyCanvas.addEventListener('pointermove', event => {
+      if (topologyState.dragNode === null) return;
+      const node = getTopologyNode(topologyState.dragNode);
+      const point = topologyPoint(event);
+      if (Math.abs(point.x - node.x) > 2 || Math.abs(point.y - node.y) > 2) topologyState.moved = true;
+      node.x = point.x;
+      node.y = point.y;
+      renderTopology();
+    });
+
+    topologyCanvas.addEventListener('pointerup', () => {
+      topologyState.dragNode = null;
+    });
+
+    document.getElementById('addTopologyDevice').addEventListener('click', addTopologyDevice);
+    document.getElementById('connectTopologyDevices').addEventListener('click', event => {
+      topologyState.connectMode = !topologyState.connectMode;
+      topologyState.deleteMode = false;
+      topologyState.selectedNodeId = null;
+      document.getElementById('removeTopologyDevice').textContent = 'Supprimer un équipement';
+      event.currentTarget.textContent = topologyState.connectMode ? 'Mode de liaison actif' : 'Relier deux équipements';
+      topologyStatus.textContent = topologyState.connectMode ? 'Cliquez sur deux équipements pour les relier.' : 'Mode de liaison désactivé.';
+      renderTopology();
+    });
+
+    document.getElementById('removeTopologyDevice').addEventListener('click', event => {
+      topologyState.deleteMode = !topologyState.deleteMode;
+      topologyState.connectMode = false;
+      topologyState.selectedNodeId = null;
+      document.getElementById('connectTopologyDevices').textContent = 'Relier deux équipements';
+      event.currentTarget.textContent = topologyState.deleteMode ? 'Cliquez sur un équipement' : 'Supprimer un équipement';
+      topologyStatus.textContent = topologyState.deleteMode ? 'Cliquez sur l’équipement à supprimer.' : 'Mode de suppression désactivé.';
+      renderTopology();
+    });
+
+    document.getElementById('clearTopology').addEventListener('click', () => {
+      stopTopologyTraffic('Trafic arrêté. Topologie effacée.');
+      topologyState.nodes = [];
+      topologyState.links = [];
+      topologyState.selectedNodeId = null;
+      topologyState.connectMode = false;
+      topologyState.deleteMode = false;
+      document.getElementById('connectTopologyDevices').textContent = 'Relier deux équipements';
+      document.getElementById('removeTopologyDevice').textContent = 'Supprimer un équipement';
+      topologyStatus.textContent = 'Topologie effacée. Ajoutez des équipements pour commencer.';
+      renderTopology();
+    });
+
+    document.getElementById('sendTopologyTraffic').addEventListener('click', () => {
+      stopTopologyTraffic('Nouveau trafic lancé.');
+      const sourceId = Number(trafficSource.value);
+      const destinationValue = trafficDestination.value;
+      const messageType = trafficMessageType.value;
+      const messageLabels = {
+        machine: 'Machine à machine',
+        router: 'Routeur vers équipement',
+        network: 'Réseau vers réseau',
+        lan: 'Équipement vers LAN'
+      };
+      const targetIds = destinationValue === 'allHosts'
+        ? topologyState.nodes
+          .filter(node => node.id !== sourceId && ['pc', 'server', 'accessPoint'].includes(node.type))
+          .map(node => node.id)
+        : [Number(destinationValue)];
+      const paths = targetIds
+        .map(targetId => findTopologyPath(sourceId, targetId))
+        .filter(path => path.length > 1);
+
+      if (!paths.length) {
+        topologyStatus.textContent = destinationValue === 'allHosts'
+          ? 'Aucun hôte connecté trouvé pour la diffusion.'
+          : 'Aucun chemin trouvé. Reliez les équipements avant de lancer le trafic.';
+        return;
+      }
+      const runId = topologyState.trafficRunId;
+      document.getElementById('stopTopologyTraffic').disabled = false;
+      const destinationLabel = destinationValue === 'allHosts'
+        ? `${paths.length} hôte(s)`
+        : 'la destination sélectionnée';
+      topologyStatus.textContent = `${8} bits (${messageLabels[messageType]}) sont diffusés vers ${destinationLabel} en boucle...`;
+      paths.forEach(path => animateTopologyTraffic(path, runId, messageType));
+    });
+
+    document.getElementById('stopTopologyTraffic').addEventListener('click', () => {
+      stopTopologyTraffic();
+    });
+
+    document.getElementById('zoomInTopology').addEventListener('click', () => {
+      topologyZoom = Math.min(2.5, Number((topologyZoom + 0.25).toFixed(2)));
+      updateTopologyZoom();
+    });
+
+    document.getElementById('zoomOutTopology').addEventListener('click', () => {
+      topologyZoom = Math.max(0.6, Number((topologyZoom - 0.25).toFixed(2)));
+      updateTopologyZoom();
+    });
+
+    document.getElementById('resetZoomTopology').addEventListener('click', () => {
+      topologyZoom = 1;
+      updateTopologyZoom();
+    });
+
+    renderTopology();
+    updateTopologyZoom();
+
+    const cidrPrefixInput = document.getElementById('cidrPrefix');
+    const maskInput = document.getElementById('maskInput');
+
+    cidrPrefixInput.addEventListener('input', () => {
+      const prefixValue = cidrPrefixInput.value.trim();
+      maskInput.value = '';
+
+      if (prefixValue !== '') {
+        const prefix = Number(prefixValue);
+        if (Number.isInteger(prefix) && prefix >= 0 && prefix <= 32) {
+          maskInput.value = prefixToMask(prefix);
+          calculateCidr();
+        }
+      }
+    });
+
+    maskInput.addEventListener('input', () => {
+      const mask = maskInput.value.trim();
+      cidrPrefixInput.value = '';
+
+      if (ipIsValid(mask)) {
+        const prefix = maskToPrefix(mask);
+        if (prefix !== -1) {
+          cidrPrefixInput.value = prefix;
+          calculateCidr();
+        }
+      }
+    });
+
+    function ipToNumber(ip) {
+      return ip.trim().split('.').reduce((acc, part) => (acc << 8) + Number(part), 0) >>> 0;
+    }
+
+    function numberToIp(value) {
+      return [
+        (value >>> 24) & 255,
+        (value >>> 16) & 255,
+        (value >>> 8) & 255,
+        value & 255
+      ].join('.');
+    }
+
+    function ipIsValid(ip) {
+      if (!ip || typeof ip !== 'string') return false;
+      const parts = ip.trim().split('.');
+      if (parts.length !== 4) return false;
+      return parts.every(part => /^\d+$/.test(part) && Number(part) >= 0 && Number(part) <= 255);
+    }
+
+    function maskToPrefix(mask) {
+      const bits = ipToNumber(mask).toString(2).padStart(32, '0');
+      const prefix = bits.split('0')[0].length;
+      return bits.includes('01') ? -1 : prefix;
+    }
+
+    function prefixToMask(prefix) {
+      if (prefix < 0 || prefix > 32) return null;
+      const mask = prefix === 0 ? 0 : ((0xffffffff << (32 - prefix)) >>> 0);
+      return numberToIp(mask);
+    }
+
+    function getSubnetInfo(ip, mask) {
+      if (!ipIsValid(ip) || !ipIsValid(mask)) {
+        return null;
+      }
+
+      const ipNumber = ipToNumber(ip);
+      const maskNumber = ipToNumber(mask);
+      const prefix = maskToPrefix(mask);
+      if (prefix === -1) return null;
+
+      const network = (ipNumber & maskNumber) >>> 0;
+      const wildcard = (~maskNumber) >>> 0;
+      const broadcast = (network | wildcard) >>> 0;
+      const total = 2 ** (32 - prefix);
+      const hostsUsable = prefix === 31 ? 2 : prefix === 32 ? 1 : Math.max(0, total - 2);
+      const firstUsable = prefix === 31 ? network : prefix === 32 ? network : network + 1;
+      const lastUsable = prefix === 31 ? broadcast : prefix === 32 ? network : broadcast - 1;
+
+      return {
+        ip,
+        mask,
+        prefix,
+        network: numberToIp(network),
+        broadcast: numberToIp(broadcast),
+        firstUsable: numberToIp(firstUsable),
+        lastUsable: numberToIp(lastUsable),
+        totalAddresses: total,
+        hostsUsable,
+        wildcard: numberToIp(wildcard)
+      };
+    }
+
+    function calculateSubnet() {
+      const ip = document.getElementById('ipAddress').value;
+      const mask = document.getElementById('subnetMask').value;
+      const info = getSubnetInfo(ip, mask);
+      const box = document.getElementById('subnetResult');
+
+      if (!info) {
+        box.innerHTML = '<strong>Erreur :</strong> Vérifiez l’adresse IP et le masque.';
+        return;
+      }
+
+      box.innerHTML = `
+        <strong>Réseau :</strong> ${info.network}<br>
+        <strong>Broadcast :</strong> ${info.broadcast}<br>
+        <strong>Masque :</strong> ${info.mask} /${info.prefix}<br>
+        <strong>Plage utilisable :</strong> ${info.firstUsable} - ${info.lastUsable}<br>
+        <strong>Adresses totales :</strong> ${info.totalAddresses}<br>
+        <strong>Hôtes utilisables :</strong> ${info.hostsUsable}
+      `;
+    }
+
+    function resetIpCalc() {
+      document.getElementById('ipAddress').value = '192.168.10.25';
+      document.getElementById('subnetMask').value = '255.255.255.0';
+      document.getElementById('subnetResult').innerHTML = '';
+    }
+
+    function calculateCidr() {
+      const prefixValue = document.getElementById('cidrPrefix').value.trim();
+      const mask = document.getElementById('maskInput').value.trim();
+      const resultBox = document.getElementById('cidrResult');
+      const hasPrefix = prefixValue !== '';
+      const hasMask = mask !== '';
+
+      if (!hasPrefix && !hasMask) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> saisissez un préfixe ou un masque.';
+        return;
+      }
+
+      const prefix = Number(prefixValue);
+      if (hasPrefix && (!Number.isInteger(prefix) || prefix < 0 || prefix > 32)) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> le préfixe doit être compris entre 0 et 32.';
+        return;
+      }
+
+      if (hasMask && !ipIsValid(mask)) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> saisissez un masque IPv4 valide.';
+        return;
+      }
+
+      const maskPrefix = hasMask ? maskToPrefix(mask) : prefix;
+      if (maskPrefix === -1) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> le masque doit être valide et contigu.';
+        return;
+      }
+
+      const resolvedPrefix = hasPrefix ? prefix : maskPrefix;
+      const resolvedMask = hasMask ? mask : prefixToMask(resolvedPrefix);
+
+      if (hasPrefix && hasMask && prefix !== maskPrefix) {
+        resultBox.innerHTML = `<strong>Erreur :</strong> /${prefix} correspond à ${prefixToMask(prefix)}, pas à ${mask}.`;
+        return;
+      }
+
+      const totalAddresses = 2 ** (32 - resolvedPrefix);
+      const usableHosts = resolvedPrefix === 32 ? 1 : resolvedPrefix === 31 ? 2 : Math.max(0, totalAddresses - 2);
+      resultBox.innerHTML = `
+        <strong>Correspondance valide :</strong> /${resolvedPrefix} = ${resolvedMask}<br>
+        <strong>Adresses totales :</strong> ${totalAddresses}<br>
+        <strong>Hôtes utilisables :</strong> ${usableHosts}
+      `;
+    }
+
+    function calculateDhcp() {
+      const network = document.getElementById('dhcpNetwork').value.trim();
+      const mask = document.getElementById('dhcpMask').value.trim();
+      const start = Number(document.getElementById('dhcpStart').value || 100);
+      const end = Number(document.getElementById('dhcpEnd').value || 200);
+      const resultBox = document.getElementById('dhcpResult');
+
+      if (!ipIsValid(network) || !ipIsValid(mask)) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> vérifiez le réseau et le masque.';
+        return;
+      }
+
+      const info = getSubnetInfo(network, mask);
+      if (!info) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> masque invalide.';
+        return;
+      }
+
+      const netBase = ipToNumber(network);
+      const networkIp = netBase >>> 0;
+      const startIp = (networkIp + Math.max(1, Math.min(start, 254))) >>> 0;
+      const endIp = (networkIp + Math.max(startIp - networkIp + 1, Math.min(end, 254))) >>> 0;
+
+      const poolStart = numberToIp(startIp);
+      const poolEnd = numberToIp(endIp);
+
+      resultBox.innerHTML = `
+        <strong>Réseau :</strong> ${info.network}<br>
+        <strong>Plage DHCP :</strong> ${poolStart} - ${poolEnd}<br>
+        <strong>Passerelle :</strong> ${info.firstUsable}<br>
+        <strong>Broadcast :</strong> ${info.broadcast}
+      `;
+    }
+
+    function calculateHosts() {
+      const prefix = Number(document.getElementById('hostPrefix').value);
+      const resultBox = document.getElementById('hostResult');
+
+      if (prefix < 0 || prefix > 32) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> le préfixe doit être entre 0 et 32.';
+        return;
+      }
+
+      const total = 2 ** (32 - prefix);
+      const usable = prefix === 32 ? 1 : prefix === 31 ? 2 : Math.max(0, total - 2);
+
+      resultBox.innerHTML = `
+        <strong>Adresses totales :</strong> ${total}<br>
+        <strong>Hôtes utilisables :</strong> ${usable}<br>
+        <strong>Masque de classe :</strong> ${prefixToMask(prefix)} /${prefix}
+      `;
+    }
+
+    function convertBase() {
+      const value = document.getElementById('baseInputValue').value.trim();
+      const fromBase = Number(document.getElementById('baseFrom').value);
+      const toBase = Number(document.getElementById('baseTo').value);
+      const resultBox = document.getElementById('baseResult');
+
+      if (!value) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> saisissez une valeur à convertir.';
+        return;
+      }
+
+      const normalizedValue = value.toUpperCase();
+      const decimalValue = parseInt(normalizedValue, fromBase);
+
+      if (!Number.isFinite(decimalValue)) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> la valeur ne correspond pas à la base sélectionnée.';
+        return;
+      }
+
+      const converted = decimalValue.toString(toBase).toUpperCase();
+      resultBox.innerHTML = `
+        <strong>Valeur d’entrée :</strong> ${normalizedValue}<br>
+        <strong>Base source :</strong> ${fromBase}<br>
+        <strong>Base cible :</strong> ${toBase}<br>
+        <strong>Résultat :</strong> ${converted}
+      `;
+    }
+
+    function calculateClass() {
+      const ip = document.getElementById('classIp').value.trim();
+      const resultBox = document.getElementById('classResult');
+
+      if (!ipIsValid(ip)) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> saisissez une adresse valide.';
+        return;
+      }
+
+      const first = Number(ip.split('.')[0]);
+      let classe = 'A';
+      let type = 'Privé';
+      let defaultMask = '255.0.0.0';
+
+      if (first >= 1 && first <= 126) {
+        classe = 'A';
+        defaultMask = '255.0.0.0';
+      } else if (first >= 128 && first <= 191) {
+        classe = 'B';
+        defaultMask = '255.255.0.0';
+      } else if (first >= 192 && first <= 223) {
+        classe = 'C';
+        defaultMask = '255.255.255.0';
+      } else if (first >= 224 && first <= 239) {
+        classe = 'D';
+        defaultMask = '255.255.255.255';
+      } else if (first >= 240 && first <= 255) {
+        classe = 'E';
+        defaultMask = '255.255.255.255';
+      }
+
+      if (first === 10 || (first >= 172 && first <= 172 && Number(ip.split('.')[1]) >= 16 && Number(ip.split('.')[1]) <= 31) || (first === 192 && Number(ip.split('.')[1]) === 168)) {
+        type = 'Privé';
+      } else if (first === 127) {
+        type = 'Loopback';
+      } else if (first >= 224) {
+        type = 'Multicast / réservée';
+      } else {
+        type = 'Public';
+      }
+
+      resultBox.innerHTML = `
+        <strong>Classe :</strong> ${classe}<br>
+        <strong>Type :</strong> ${type}<br>
+        <strong>Masque de classe :</strong> ${defaultMask}
+      `;
+    }
+
+    function calculateVlanPlan() {
+      const network = document.getElementById('vlanNetwork').value.trim();
+      const mask = document.getElementById('vlanMask').value.trim();
+      const vlanCountInput = Number(document.getElementById('vlanCount').value || 1);
+      const desiredHosts = Number(document.getElementById('vlanHosts').value || 0);
+      const vlanSizesInput = document.getElementById('vlanSizes').value.trim();
+      const resultBox = document.getElementById('vlanResult');
+
+      if (!ipIsValid(network) || !ipIsValid(mask)) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> vérifiez le réseau et le masque de base.';
+        return;
+      }
+
+      const baseInfo = getSubnetInfo(network, mask);
+      if (!baseInfo) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> masque invalide.';
+        return;
+      }
+
+      let vlanCounts = [];
+      if (vlanSizesInput) {
+        vlanCounts = vlanSizesInput
+          .split(',')
+          .map(item => Number(item.trim()))
+          .filter(value => Number.isFinite(value) && value > 0);
+      }
+
+      let vlanCount = vlanCounts.length || vlanCountInput;
+      if (vlanCount <= 0) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> saisissez au moins un VLAN.';
+        return;
+      }
+
+      if (vlanCounts.length === 0 && desiredHosts > 0) {
+        vlanCounts = Array(vlanCount).fill(desiredHosts);
+      }
+
+      if (vlanCounts.length > 0 && vlanCounts.length !== vlanCount) {
+        vlanCount = vlanCounts.length;
+      }
+
+      const maxHosts = Math.max(...(vlanCounts.length ? vlanCounts : Array(vlanCount).fill(desiredHosts || 30)));
+      const requiredByVlan = vlanCount > 1 ? Math.ceil(Math.log2(vlanCount)) : 0;
+      const requiredByHosts = maxHosts > 0 ? Math.ceil(Math.log2(maxHosts + 2)) : 0;
+      const subnetBits = Math.max(requiredByVlan, requiredByHosts);
+      const newPrefix = baseInfo.prefix + subnetBits;
+
+      if (newPrefix > 30) {
+        resultBox.innerHTML = '<strong>Erreur :</strong> le plan VLAN demandé est trop petit pour ce réseau. Essayez un sous-réseau plus large ou moins de VLAN.';
+        return;
+      }
+
+      const blockSize = 2 ** (32 - newPrefix);
+      const baseNetwork = ipToNumber(network) & ipToNumber(mask);
+      const masks = prefixToMask(newPrefix);
+      const lines = [];
+
+      for (let i = 0; i < vlanCount; i++) {
+        const start = (baseNetwork + i * blockSize) >>> 0;
+        const end = (start + blockSize - 1) >>> 0;
+        const firstHost = start + 1;
+        const lastHost = end - 1;
+        const hostCount = vlanCounts.length ? vlanCounts[i] : desiredHosts || 30;
+
+        lines.push(
+          `<li><strong>VLAN ${i + 1} (${hostCount} machines):</strong> ${numberToIp(start)}/${newPrefix} | Hôtes: ${numberToIp(firstHost)} - ${numberToIp(lastHost)} | Broadcast: ${numberToIp(end)}</li>`
+        );
+      }
+
+      resultBox.innerHTML = `
+        <strong>Masque VLAN :</strong> ${masks} /${newPrefix}<br>
+        <strong>Bloc par VLAN :</strong> ${blockSize} adresses<br>
+        <strong>Max machines d’un VLAN :</strong> ${maxHosts}<br>
+        <ul class="vlan-list">${lines.join('')}</ul>
+      `;
+    }
+  </script>
+</body>
+
+</html>
