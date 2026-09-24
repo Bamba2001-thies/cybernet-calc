@@ -185,6 +185,20 @@
       border-radius: 18px;
       padding: 18px 16px;
       box-shadow: 0 12px 24px var(--shadow);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat:hover,
+    .stat:focus-visible,
+    .mini-box:hover,
+    .mini-box:focus-visible,
+    .concept-card:hover,
+    .concept-card:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px var(--shadow);
+      outline: 3px solid rgba(11, 94, 215, 0.14);
     }
 
     .stat strong {
@@ -223,6 +237,9 @@
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 14px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .mini-box strong {
@@ -467,6 +484,8 @@
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.9);
       box-shadow: 0 10px 22px var(--shadow);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .concept-card h3 {
@@ -481,6 +500,51 @@
       font-size: 0.86rem;
       line-height: 1.55;
     }
+
+    .info-dialog {
+      width: min(620px, calc(100% - 28px));
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--text);
+      box-shadow: 0 24px 60px rgba(18, 38, 61, 0.25);
+    }
+
+    .info-dialog::backdrop { background: rgba(18, 38, 61, 0.38); }
+
+    .info-dialog-content { padding: 24px; }
+
+    .info-dialog-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .info-dialog h2 { margin: 0; color: var(--primary); }
+    .info-dialog p { color: var(--muted); line-height: 1.6; }
+
+    .info-dialog-close {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    .info-dialog-section {
+      margin: 14px 0;
+      padding: 14px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      background: rgba(212, 175, 55, 0.08);
+    }
+
+    .info-dialog-section strong { color: var(--text); }
 
     .vlan-list {
       margin: 14px 0 0;
@@ -646,15 +710,15 @@
           </p>
 
           <div class="quick-stats">
-            <div class="stat">
+            <div class="stat" data-info="ip" role="button" tabindex="0">
               <strong>IP</strong>
               <span>Adresse / réseau</span>
             </div>
-            <div class="stat">
+            <div class="stat" data-info="dhcp" role="button" tabindex="0">
               <strong>DHCP</strong>
               <span>Plages automatiques</span>
             </div>
-            <div class="stat">
+            <div class="stat" data-info="vlsm" role="button" tabindex="0">
               <strong>VLSM</strong>
               <span>Gestion d'espace</span>
             </div>
@@ -664,19 +728,19 @@
         <aside class="hero-card">
           <h3>Outils rapides</h3>
           <div class="mini-grid">
-            <div class="mini-box">
+            <div class="mini-box" data-info="ipv4" role="button" tabindex="0">
               <strong>IPv4</strong>
               <span>Masque / réseau / hôtes</span>
             </div>
-            <div class="mini-box">
+            <div class="mini-box" data-info="cidr" role="button" tabindex="0">
               <strong>CIDR</strong>
               <span>/24, /26, /29</span>
             </div>
-            <div class="mini-box">
+            <div class="mini-box" data-info="dhcp" role="button" tabindex="0">
               <strong>DHCP</strong>
               <span>Range automatique</span>
             </div>
-            <div class="mini-box">
+            <div class="mini-box" data-info="base" role="button" tabindex="0">
               <strong>Base</strong>
               <span>Conversion rapide</span>
             </div>
@@ -687,21 +751,32 @@
       <section class="concepts-section" aria-labelledby="concepts-heading">
         <h2 class="concepts-heading" id="concepts-heading">Comprendre les notions réseau</h2>
         <div class="concepts-grid">
-          <article class="concept-card">
+          <article class="concept-card" data-info="cidr" role="button" tabindex="0">
             <h3>CIDR</h3>
             <p><strong>Définition :</strong> le préfixe indique la partie réseau d’une adresse IP. <strong>/24</strong> équivaut à <strong>255.255.255.0</strong>.<br><br><strong>Fonctionnement :</strong> les bits du préfixe identifient le réseau et les bits restants identifient les hôtes. Le calculateur convertit les deux notations et calcule la capacité du réseau.</p>
           </article>
-          <article class="concept-card">
+          <article class="concept-card" data-info="dhcp" role="button" tabindex="0">
             <h3>DHCP</h3>
             <p><strong>Définition :</strong> le DHCP attribue automatiquement une adresse IP, un masque, une passerelle et parfois un DNS.<br><br><strong>Fonctionnement :</strong> l’appareil demande une configuration, le serveur propose une adresse disponible, puis confirme un bail. L’outil simule la plage d’adresses distribuées.</p>
           </article>
-          <article class="concept-card">
+          <article class="concept-card" data-info="vlsm" role="button" tabindex="0">
             <h3>VLSM</h3>
             <p><strong>Définition :</strong> le VLSM utilise des masques de tailles différentes pour adapter chaque sous-réseau au nombre de machines nécessaire.<br><br><strong>Fonctionnement :</strong> le planificateur analyse les besoins des départements et affiche le masque, le réseau, la plage d’hôtes et le broadcast de chaque VLAN.</p>
           </article>
         </div>
       </section>
     </section>
+
+    <dialog class="info-dialog" id="infoDialog" aria-labelledby="infoDialogTitle">
+      <div class="info-dialog-content">
+        <div class="info-dialog-header">
+          <h2 id="infoDialogTitle"></h2>
+          <button class="info-dialog-close" id="infoDialogClose" aria-label="Fermer">&times;</button>
+        </div>
+        <div id="infoDialogBody"></div>
+        <button class="btn btn-primary" id="infoDialogTool">Ouvrir l’outil</button>
+      </div>
+    </dialog>
 
     <section class="single-panel">
       <div class="selector-row">
@@ -982,6 +1057,97 @@
 
     calcTypeSelect.addEventListener('change', (event) => {
       showTool(event.target.value);
+    });
+
+    const infoDialog = document.getElementById('infoDialog');
+    const infoDialogTitle = document.getElementById('infoDialogTitle');
+    const infoDialogBody = document.getElementById('infoDialogBody');
+    const infoDialogTool = document.getElementById('infoDialogTool');
+    const infoDialogClose = document.getElementById('infoDialogClose');
+
+    const infoCards = {
+      ip: {
+        title: 'IPv4 et sous-réseau',
+        tool: 'subnet',
+        button: 'Ouvrir le calculateur IP',
+        definition: 'Une adresse IPv4 identifie une interface sur un réseau avec quatre octets, par exemple 192.168.10.25.',
+        process: 'Le masque sépare la partie réseau de la partie hôte. L’outil applique le masque à l’adresse IP pour trouver le réseau, puis calcule le broadcast et la plage utilisable.',
+        example: '192.168.10.25 avec 255.255.255.0 donne le réseau 192.168.10.0 et le broadcast 192.168.10.255.'
+      },
+      ipv4: {
+        title: 'IPv4',
+        tool: 'subnet',
+        button: 'Ouvrir le calculateur IPv4',
+        definition: 'IPv4 est le protocole d’adressage utilisé pour identifier les équipements sur un réseau.',
+        process: 'On saisit une adresse et un masque, puis le calculateur détermine les limites du réseau et les adresses attribuables aux machines.',
+        example: 'Dans 192.168.1.0/24, les adresses 192.168.1.1 à 192.168.1.254 sont utilisables par les hôtes.'
+      },
+      cidr: {
+        title: 'CIDR',
+        tool: 'cidr',
+        button: 'Ouvrir le convertisseur CIDR',
+        definition: 'CIDR signifie Classless Inter-Domain Routing. La notation /24 indique que 24 bits appartiennent au réseau.',
+        process: 'Le préfixe est converti en masque, ou le masque en préfixe. Les bits restants servent à calculer le nombre d’adresses et d’hôtes.',
+        example: '/24 correspond à 255.255.255.0, soit 256 adresses et généralement 254 hôtes utilisables.'
+      },
+      dhcp: {
+        title: 'DHCP',
+        tool: 'dhcp',
+        button: 'Ouvrir le calculateur DHCP',
+        definition: 'DHCP signifie Dynamic Host Configuration Protocol. Il fournit automatiquement une configuration réseau aux appareils.',
+        process: 'Le client découvre le serveur, reçoit une proposition, demande l’adresse, puis obtient une confirmation de bail. Le calculateur simule la plage attribuable.',
+        example: 'Sur 192.168.1.0/24, une plage DHCP de 100 à 200 distribue 192.168.1.100 jusqu’à 192.168.1.200.'
+      },
+      vlsm: {
+        title: 'VLSM et VLAN',
+        tool: 'vlan',
+        button: 'Ouvrir le planificateur VLAN',
+        definition: 'VLSM signifie Variable Length Subnet Mask. Il permet d’utiliser des sous-réseaux de tailles différentes selon les besoins.',
+        process: 'On indique le réseau de base, le nombre de VLAN et les machines nécessaires par département. Le planificateur calcule les blocs, les masques, les plages d’hôtes et les broadcasts.',
+        example: 'Un service de 60 machines reçoit un bloc plus grand qu’un service de 10 machines afin de limiter le gaspillage d’adresses.'
+      },
+      base: {
+        title: 'Conversion entre bases',
+        tool: 'binary',
+        button: 'Ouvrir le convertisseur de base',
+        definition: 'La conversion entre bases permet d’exprimer une même valeur en binaire, décimal, octal ou hexadécimal.',
+        process: 'La valeur est interprétée dans la base source, convertie en valeur numérique, puis réécrite dans la base cible.',
+        example: 'Le nombre décimal 10 devient 1010 en binaire, 12 en octal et A en hexadécimal.'
+      }
+    };
+
+    function openInfoDialog(cardType) {
+      const card = infoCards[cardType];
+      if (!card) return;
+      infoDialogTitle.textContent = card.title;
+      infoDialogBody.innerHTML = `
+        <div class="info-dialog-section"><strong>Signification</strong><p>${card.definition}</p></div>
+        <div class="info-dialog-section"><strong>Processus de fonctionnement</strong><p>${card.process}</p></div>
+        <div class="info-dialog-section"><strong>Exemple</strong><p>${card.example}</p></div>
+      `;
+      infoDialogTool.textContent = card.button;
+      infoDialogTool.dataset.tool = card.tool;
+      infoDialog.showModal();
+    }
+
+    document.querySelectorAll('[data-info]').forEach(card => {
+      card.addEventListener('click', () => openInfoDialog(card.dataset.info));
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openInfoDialog(card.dataset.info);
+        }
+      });
+    });
+
+    infoDialogClose.addEventListener('click', () => infoDialog.close());
+    infoDialog.addEventListener('click', event => {
+      if (event.target === infoDialog) infoDialog.close();
+    });
+    infoDialogTool.addEventListener('click', () => {
+      showTool(infoDialogTool.dataset.tool);
+      infoDialog.close();
+      document.querySelector('.single-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     const topologyCanvas = document.getElementById('topologyCanvas');
