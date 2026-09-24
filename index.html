@@ -445,6 +445,43 @@
 
     .concept-note strong { color: var(--text); }
 
+    .concepts-section {
+      margin: 8px 0 30px;
+    }
+
+    .concepts-heading {
+      margin: 0 0 14px;
+      color: var(--text);
+      font-size: 1.25rem;
+    }
+
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .concept-card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 22px var(--shadow);
+    }
+
+    .concept-card h3 {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-size: 1.05rem;
+    }
+
+    .concept-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
     .vlan-list {
       margin: 14px 0 0;
       padding-left: 18px;
@@ -541,7 +578,8 @@
     @media (max-width: 860px) {
       .hero-grid,
       .grid,
-      .quick-stats {
+      .quick-stats,
+      .concepts-grid {
         grid-template-columns: 1fr;
       }
 
@@ -645,6 +683,24 @@
           </div>
         </aside>
       </div>
+
+      <section class="concepts-section" aria-labelledby="concepts-heading">
+        <h2 class="concepts-heading" id="concepts-heading">Comprendre les notions réseau</h2>
+        <div class="concepts-grid">
+          <article class="concept-card">
+            <h3>CIDR</h3>
+            <p><strong>Définition :</strong> le préfixe indique la partie réseau d’une adresse IP. <strong>/24</strong> équivaut à <strong>255.255.255.0</strong>.<br><br><strong>Fonctionnement :</strong> les bits du préfixe identifient le réseau et les bits restants identifient les hôtes. Le calculateur convertit les deux notations et calcule la capacité du réseau.</p>
+          </article>
+          <article class="concept-card">
+            <h3>DHCP</h3>
+            <p><strong>Définition :</strong> le DHCP attribue automatiquement une adresse IP, un masque, une passerelle et parfois un DNS.<br><br><strong>Fonctionnement :</strong> l’appareil demande une configuration, le serveur propose une adresse disponible, puis confirme un bail. L’outil simule la plage d’adresses distribuées.</p>
+          </article>
+          <article class="concept-card">
+            <h3>VLSM</h3>
+            <p><strong>Définition :</strong> le VLSM utilise des masques de tailles différentes pour adapter chaque sous-réseau au nombre de machines nécessaire.<br><br><strong>Fonctionnement :</strong> le planificateur analyse les besoins des départements et affiche le masque, le réseau, la plage d’hôtes et le broadcast de chaque VLAN.</p>
+          </article>
+        </div>
+      </section>
     </section>
 
     <section class="single-panel">
@@ -760,10 +816,6 @@
       <div class="tool-panel" data-tool="cidr">
         <h2>Convertisseur CIDR / masque</h2>
         <p class="subtitle">Saisissez le préfixe ou le masque : l’autre valeur sera calculée automatiquement.</p>
-        <div class="concept-note">
-          <strong>CIDR :</strong> le préfixe indique combien de bits appartiennent au réseau. Par exemple, <strong>/24</strong> équivaut à <strong>255.255.255.0</strong>. Le calculateur convertit automatiquement l’un vers l’autre et indique la capacité du réseau.
-        </div>
-
         <div class="field">
           <label for="cidrPrefix">Préfixe CIDR</label>
           <input id="cidrPrefix" type="number" min="0" max="32" placeholder="Ex : 24" />
@@ -784,10 +836,6 @@
       <div class="tool-panel" data-tool="dhcp">
         <h2>Plage DHCP</h2>
         <p class="subtitle">Générez automatiquement une plage DHCP à partir du réseau.</p>
-        <div class="concept-note">
-          <strong>DHCP :</strong> ce service attribue automatiquement une adresse IP, un masque et une passerelle aux appareils. Saisissez le réseau, le masque et les bornes de la plage pour simuler les adresses distribuées.
-        </div>
-
         <div class="field">
           <label for="dhcpNetwork">Réseau</label>
           <input id="dhcpNetwork" type="text" value="192.168.1.0" />
@@ -886,10 +934,6 @@
       <div class="tool-panel" data-tool="vlan">
         <h2>Planificateur VLAN</h2>
         <p class="subtitle">Choisissez un réseau, le nombre de VLAN et calculez automatiquement la répartition.</p>
-        <div class="concept-note">
-          <strong>VLSM :</strong> le découpage variable permet d’adapter les sous-réseaux aux besoins de chaque département. Indiquez le nombre de machines par VLAN ; l’outil calcule le préfixe, le masque, la plage d’hôtes et le broadcast nécessaires.
-        </div>
-
         <div class="field">
           <label for="vlanNetwork">Réseau de base</label>
           <input id="vlanNetwork" type="text" value="192.168.10.0" />
