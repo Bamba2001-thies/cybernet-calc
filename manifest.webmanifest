@@ -1,0 +1,17 @@
+{
+  "name": "CyberNet Calc",
+  "short_name": "CyberNet Calc",
+  "description": "Calculateur réseau et constructeur de topologies interactives.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0b5ed7",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
